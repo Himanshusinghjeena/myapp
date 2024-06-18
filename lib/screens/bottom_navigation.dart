@@ -29,8 +29,6 @@ class _BottomNavigationState extends State<BottomNavigation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(title:Text("Bottom Navigator"),
-    //  ),
       body:PageView(
         controller: pageController,
           children: [

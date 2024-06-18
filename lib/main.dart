@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/screens/bottom_navigation.dart';
 import 'package:myapp/screens/welcome_screen.dart';
 
 void main() {
