@@ -1,5 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_unnecessary_containers, sized_box_for_whitespace, prefer_final_fields, non_constant_identifier_names, avoid_print, unnecessary_null_comparison
-
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_unnecessary_containers, sized_box_for_whitespace, prefer_final_fields, non_constant_identifier_names, avoid_print, unnecessary_null_comparison, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
@@ -7,15 +6,14 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
 import 'package:myapp/screens/login_screen.dart';
+import 'package:myapp/screens/sharedpref.dart';
 
 class SignUpScreen extends StatefulWidget {
-
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-
   TextEditingController emailController = TextEditingController();
   RegExp emailRegExp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
 
@@ -25,6 +23,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController passwordController = TextEditingController();
   RegExp passwordRegExp = RegExp(
       r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{4,12}$');
+
+  TextEditingController addressController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController ageController = TextEditingController();
 
   XFile? profilepic;
   ImagePicker picker = ImagePicker();
@@ -65,13 +67,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
               width: double.infinity),
           Column(children: [
             Expanded(
-              flex: 2,
+              flex: 1,
               child: SizedBox(),
             ),
             Expanded(
                 flex: 7,
                 child: Container(
-                  padding: EdgeInsets.fromLTRB(25, 20, 25, 0),
+                  padding: EdgeInsets.fromLTRB(25, 10, 25, 0),
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
@@ -96,11 +98,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 ),
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 15),
                       Form(
                           key: signupkey,
                           child: Column(children: [
                             TextFormField(
+                                keyboardType: TextInputType.emailAddress,
                                 controller: emailController,
                                 validator: (value) {
                                   if (value!.isEmpty || value == null) {
@@ -118,12 +121,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       borderSide:
                                           BorderSide(color: Colors.black12),
                                       borderRadius: BorderRadius.circular(10)),
-                                  enabledBorder: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.black12),
-                                      borderRadius: BorderRadius.circular(10)),
                                 )),
-                            const SizedBox(height: 15),
+                            const SizedBox(height: 10),
                             TextFormField(
                               controller: usernameController,
                               decoration: InputDecoration(
@@ -131,10 +130,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 hintText: "Enter Username",
                                 hintStyle: TextStyle(color: Colors.black26),
                                 border: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.black12),
-                                    borderRadius: BorderRadius.circular(10)),
-                                enabledBorder: OutlineInputBorder(
                                     borderSide:
                                         BorderSide(color: Colors.black12),
                                     borderRadius: BorderRadius.circular(10)),
@@ -148,7 +143,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 return null;
                               },
                             ),
-                            const SizedBox(height: 15),
+                            const SizedBox(height: 10),
                             TextFormField(
                               controller: passwordController,
                               obscureText: true,
@@ -161,10 +156,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     borderSide:
                                         BorderSide(color: Colors.black12),
                                     borderRadius: BorderRadius.circular(10)),
-                                enabledBorder: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.black12),
-                                    borderRadius: BorderRadius.circular(10)),
                               ),
                               validator: (value) {
                                 if (value!.isEmpty || value == null) {
@@ -173,6 +164,72 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   return "Please Enter A Valid Password";
                                 }
                                 return null;
+                              },
+                            ),
+                            const SizedBox(height: 10),
+                            TextFormField(
+                              validator: (value) {
+                                if (value!.isEmpty || value == null) {
+                                  return "Please enter Address";
+                                }
+                                return null;
+                              },
+                              controller: addressController,
+                              decoration: InputDecoration(
+                                labelText: 'Address',
+                                hintText: "Enter Address",
+                                hintStyle: TextStyle(color: Colors.black26),
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.black12),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            TextFormField(
+                              validator: (value) {
+                                if (value!.isEmpty || value == null) {
+                                  return 'Please enter Phone Number';
+                                }
+                                return null;
+                              },
+                              controller: phoneController,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                  labelText: 'Phone No.',
+                                  hintText: "Enter Phone Number",
+                                  hintStyle: TextStyle(color: Colors.black26),
+                                  border: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.black26),
+                                      borderRadius: BorderRadius.circular(10))),
+                            ),
+                            const SizedBox(height: 10),
+                            TextFormField(
+                              controller: ageController,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                  labelText: 'Age',
+                                  hintText: "Enter Your Age",
+                                  hintStyle: TextStyle(color: Colors.black26),
+                                  border: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.black26),
+                                      borderRadius: BorderRadius.circular(10))),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Please Enter Age';
+                                } else {
+                                  try {
+                                    final age = int.parse(value);
+                                    if (age < 18) {
+                                      return 'You must be Greater than 18+';
+                                    }
+                                  } catch (e) {
+                                    return 'Please enter a valid number';
+                                  }
+                                }
+                                return null; // Return null if the value is valid
                               },
                             ),
                             const SizedBox(height: 10),
@@ -204,7 +261,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 ),
                               ],
                             ),
-                            SizedBox(height: 10),
                             Row(
                               children: [
                                 Checkbox(
@@ -226,50 +282,53 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         fontWeight: FontWeight.bold))
                               ],
                             ),
-                            SizedBox(height: 15),
                             Container(
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20)),
                                 width: double.infinity,
                                 child: ElevatedButton(
-                                    onPressed: () {
+                                    onPressed: () async {
                                       if (signupkey.currentState!.validate() &&
-                                          agree &&  profilepic!=null) {
-                                            Navigator.push(context,MaterialPageRoute(builder: (context)=>LogInScreen(email: emailController.text,password: passwordController.text,pic:XFile(profilepic!.path))));
-                                       ScaffoldMessenger.of(context)
+                                          agree) {
+                                        await Sharedpref().setUserName(
+                                            usernameController.text);
+                                        await Sharedpref()
+                                            .setEmail(emailController.text);
+                                        await Sharedpref().setPassword(
+                                            passwordController.text);
+                                        await Sharedpref()
+                                            .setAddress(addressController.text);
+                                        await Sharedpref()
+                                            .setPhone(phoneController.text);
+                                        await Sharedpref()
+                                            .setAge(ageController.text);
+                                        if (profilepic != null) {
+                                          await Sharedpref()
+                                              .setProfile(profilepic!.path);
+                                        } else {
+                                          await Sharedpref().setProfile(
+                                              "null"); 
+                                        }
+                                        Sharedpref().printdata();
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    LogInScreen()));
+                                        ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           SnackBar(
-                                            content: Text(
-                                                'Sign up Successfully with Pic'),
+                                            content:
+                                                Text('Sign up Successfully'),
                                           ),
                                         );
-                                      } 
-                                     else if (signupkey.currentState!.validate() &&
-                                          agree && profilepic==null) {
-                                            Navigator.push(context,MaterialPageRoute(builder: (context)=>LogInScreen(email: emailController.text,password: passwordController.text)));
-                                       ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                                'Sign up Successfully Without Pic'),
-                                          ),
-                                        );
-                                      } 
-                                      else if (!signupkey.currentState!.validate()){
+                                      } else if (!signupkey.currentState!
+                                          .validate()) {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           SnackBar(
                                             content: Text(
                                                 'Please Fill Correct Details'),
-                                          ),
-                                        );
-                                      }
-                                      else{
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                                'Agree the Personal Data For Processing'),
                                           ),
                                         );
                                       }
@@ -326,9 +385,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   ),
                                 ),
                                 GestureDetector(
-                                            
                                   onTap: () {
-                                    Navigator.push(context,MaterialPageRoute(builder: (context)=>LogInScreen()));
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                LogInScreen()));
                                   },
                                   child: Text(
                                     'Log in',
