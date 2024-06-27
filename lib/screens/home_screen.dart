@@ -1,19 +1,28 @@
-// ignore_for_file: avoid_unnecessary_containers, prefer_const_constructors, prefer_const_literals_to_create_immutables, must_be_immutable
+// ignore_for_file: avoid_unnecessary_containers, prefer_const_constructors, prefer_const_literals_to_create_immutables, must_be_immutable, unused_local_variable, unnecessary_string_interpolations
 
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:myapp/screens/sharedpref.dart';
 
 class HomeScreen extends StatefulWidget {
-  XFile? showpic;
-  HomeScreen({this.showpic});
-
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String? username;
+  String? email;
+  String? password;
+  String? address;
+  String? phone;
+  String? age;
+  String? image;
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               actions: [
                 IconButton(
-                    onPressed: () {},
+                    onPressed: appLogout,
                     icon: const Icon(
                       Icons.logout_outlined,
                       color: Colors.white,
@@ -53,48 +62,62 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Positioned(
             top: 100,
-            left: 20,
-            right: 20,
+            left: 50,
+            right: 50,
             child: Container(
-              height: MediaQuery.of(context).size.height * 0.155,
-              width: MediaQuery.of(context).size.width * 0.8,
+              height: MediaQuery.of(context).size.height * 0.20,
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
                 color: Colors.white,
               ),
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(10, 10, 10, 2),
-                child: Column(children: [
-                  Row(
-                    children: [
-                      Text("FIRSTNAME LASTNAME",
-                          style: TextStyle(
-                              color: Colors.green,
-                              fontWeight: FontWeight.bold)),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("College Name",
-                          style: TextStyle(fontWeight: FontWeight.w700)),
-                      widget.showpic == null
-                          ? CircleAvatar(
-                              radius: 20,
-                              backgroundColor: Colors.green,
-                              child: Icon(
-                                Icons.person,
-                                color: Colors.white,
-                                size: 35,
-                              ))
-                          : CircleAvatar(
-                              radius: 30,
-                              backgroundImage:
-                                  FileImage(File(widget.showpic!.path)),
-                            )
-                    ],
-                  ),
-                  Row(
+              child: Column(children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircleAvatar(
+                          radius: 40,
+                          backgroundImage: image == "no-image"
+                              ? AssetImage('assets/images/default_avatar.jpg')
+                              : image != null
+                                  ? FileImage(File(image!))
+                                  : null,
+                        )
+                      ]),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    RichText(
+                      text: TextSpan(
+                          text: "Welcome,",
+                          style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.green,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          children: [
+                            TextSpan(
+                                text: username != null
+                                    ? "${username!.toUpperCase()}"
+                                    : '',
+                                style: const TextStyle(color: Colors.black))
+                          ]),
+                    )
+                  ],
+                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     Text(email!,
+                //         style: TextStyle(fontWeight: FontWeight.w700)),
+                //   ],
+                // ),
+                Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
                         height: 30,
@@ -130,13 +153,59 @@ class _HomeScreenState extends State<HomeScreen> {
                             )),
                       )
                     ],
-                  )
-                ]),
-              ),
+                  ),
+                )
+              ]),
             ),
           ),
+          Positioned(
+            bottom: 0,
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(70),
+                      topRight: Radius.circular(70))),
+              height: 400,
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text("Username: $username", style: TextStyle(fontSize: 15)),
+                    Text("Email: $email", style: TextStyle(fontSize: 15)),
+                    Text("Password: $password", style: TextStyle(fontSize: 15)),
+                    Text("Address: $address", style: TextStyle(fontSize: 15)),
+                    Text("Phone: $phone", style: TextStyle(fontSize: 15)),
+                    Text("Age: $age", style: TextStyle(fontSize: 15)),
+                    Text("Image: $image", style: TextStyle(fontSize: 15)),
+                  ]),
+              // width:300
+            ),
+          )
         ],
       ),
     ));
+  }
+
+  Future<void> loadData() async {
+    username = await Sharedpref().getDetail('name');
+    email = await Sharedpref().getDetail('email');
+    password = await Sharedpref().getDetail('password');
+    address = await Sharedpref().getDetail('address');
+    phone = await Sharedpref().getDetail('phone');
+    age = await Sharedpref().getDetail('age');
+    image = await Sharedpref().getDetail('image');
+    setState(() {});
+  }
+
+  void appLogout() {
+    Sharedpref().clearData();
+    Navigator.pop(context);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: Duration(seconds: 1),
+        content: Text('Logout SuccessFully'),
+      ),
+    );
   }
 }

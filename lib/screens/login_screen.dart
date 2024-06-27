@@ -203,14 +203,14 @@ class _LogInScreenState extends State<LogInScreen> {
                                             );
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(
-                                              const SnackBar(
+                                              const SnackBar(duration: Duration(seconds: 1),
                                                   content: Text(
                                                       'Log in SuccessFull')),
                                             );
                                           } else if (isLogIn == false) {
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(
-                                              const SnackBar(
+                                              const SnackBar(duration: Duration(seconds: 1),
                                                   content:
                                                       Text('Login Failed')),
                                             );
@@ -220,9 +220,9 @@ class _LogInScreenState extends State<LogInScreen> {
                                             passwordController.text.isEmpty) {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(
-                                            const SnackBar(
+                                            const SnackBar(duration: Duration(seconds: 1),
                                                 content: Text(
-                                                    'Enter the Credentials')),
+                                                    'Invalid Email & Invalid Password')),
                                           );
                                         }
                                       },

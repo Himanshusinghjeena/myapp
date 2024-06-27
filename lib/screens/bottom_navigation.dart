@@ -2,16 +2,13 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:myapp/screens/contacts.dart';
 import 'package:myapp/screens/home_screen.dart';
 import 'package:myapp/screens/recent.dart';
 import 'package:myapp/screens/tabbar.dart';
 
 class BottomNavigation extends StatefulWidget {
-XFile? pic;
 
-  BottomNavigation({this.pic});
   @override
   State<BottomNavigation> createState() => _BottomNavigationState();
 }
@@ -32,7 +29,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
       body:PageView(
         controller: pageController,
           children: [
-           widget.pic!=null ? HomeScreen(showpic: XFile(widget.pic!.path),): HomeScreen(),
+          HomeScreen(),
           TabBarWidget(),
           Recent(),
           Contact(),
@@ -41,7 +38,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
         
       
        bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.green,
         items: [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
         BottomNavigationBarItem(icon: Icon(Icons.star_border), label: 'Favourites'),

@@ -28,7 +28,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController phoneController = TextEditingController();
   TextEditingController ageController = TextEditingController();
 
-  XFile? profilepic;
+  XFile? profilepic ;
   ImagePicker picker = ImagePicker();
   final signupkey = GlobalKey<FormState>();
   bool agree = false;
@@ -290,26 +290,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     onPressed: () async {
                                       if (signupkey.currentState!.validate() &&
                                           agree) {
-                                        await Sharedpref().setUserName(
-                                            usernameController.text);
-                                        await Sharedpref()
-                                            .setEmail(emailController.text);
-                                        await Sharedpref().setPassword(
-                                            passwordController.text);
-                                        await Sharedpref()
-                                            .setAddress(addressController.text);
-                                        await Sharedpref()
-                                            .setPhone(phoneController.text);
-                                        await Sharedpref()
-                                            .setAge(ageController.text);
-                                        if (profilepic != null) {
-                                          await Sharedpref()
-                                              .setProfile(profilepic!.path);
-                                        } else {
-                                          await Sharedpref().setProfile(
-                                              "null"); 
-                                        }
-                                        Sharedpref().printdata();
+                                        await Sharedpref().saveUserProfile(
+                                            username: usernameController.text,
+                                            email: emailController.text,
+                                            password: passwordController.text,
+                                            address: addressController.text,
+                                            phone: phoneController.text,
+                                            age: ageController.text,
+                                            profilePicPath: profilepic?.path ?? "no-image");
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
@@ -317,16 +305,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                     LogInScreen()));
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
-                                          SnackBar(
+                                          SnackBar(duration: Duration(seconds: 1),
                                             content:
                                                 Text('Sign up Successfully'),
+                                          ),
+                                        );
+                                      } else if (signupkey.currentState!
+                                              .validate() &&
+                                          agree == false) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(duration: Duration(seconds: 1),
+                                            content: Text(
+                                                'Please Agree the Policy & Services'),
                                           ),
                                         );
                                       } else if (!signupkey.currentState!
                                           .validate()) {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
-                                          SnackBar(
+                                          SnackBar(duration: Duration(seconds: 1),
                                             content: Text(
                                                 'Please Fill Correct Details'),
                                           ),

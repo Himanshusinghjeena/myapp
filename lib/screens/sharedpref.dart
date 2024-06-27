@@ -39,16 +39,17 @@ class Sharedpref {
     print("Set age: $age");
   }
 
-  setProfile(String image)async{
+  setProfile(String image) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString("image", image);
+    print("Set image: $image");
+
   }
 
   Future<String?> getDetail(String key) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(key);
   }
-
 
   printdata() async {
     String? username = await getDetail("name");
@@ -57,12 +58,42 @@ class Sharedpref {
     String? address = await getDetail("address");
     String? phone = await getDetail("phone");
     String? age = await getDetail("age");
+    String? image = await getDetail("image");
     print("username: $username");
     print("email: $email");
     print("password: $password");
     print("address: $address");
     print("phone: $phone");
     print("age: $age");
+    print("image: $image");
+  }
+
+Future<void> saveUserProfile({
+  required String username,
+  required String email,
+  required String password,
+  required String address,
+  required String phone,
+  required String age,
+  String? profilePicPath,
+}) async {
+  await Sharedpref().setUserName(username);
+  await Sharedpref().setEmail(email);
+  await Sharedpref().setPassword(password);
+  await Sharedpref().setAddress(address);
+  await Sharedpref().setPhone(phone);
+  await Sharedpref().setAge(age);
+  if (profilePicPath!= null) {
+    await Sharedpref().setProfile(profilePicPath);
+  } else {
+    await Sharedpref().setProfile("null");
+  }
+  Sharedpref().printdata();
+}
+
+  void clearData()async {
+    SharedPreferences pref =await SharedPreferences.getInstance();
+     pref.clear();
   }
 }
 
