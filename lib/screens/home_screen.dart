@@ -15,7 +15,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String? password;
   String? address;
   String? phone;
-  String? age;
+  int? age;
   String? image;
   @override
   void initState() {
@@ -193,7 +193,7 @@ class _HomeScreenState extends State<HomeScreen> {
     password = await Sharedpref().getDetail('password');
     address = await Sharedpref().getDetail('address');
     phone = await Sharedpref().getDetail('phone');
-    age = await Sharedpref().getDetail('age');
+    age = await Sharedpref().getAge('age');
     image = await Sharedpref().getDetail('image');
     setState(() {});
   }

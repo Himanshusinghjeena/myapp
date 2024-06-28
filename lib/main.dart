@@ -1,7 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:myapp/screens/contacts.dart';
+// import 'package:myapp/screens/bottomSheet.dart';
+// import 'package:myapp/screens/bottom_navigation.dart';
+// import 'package:myapp/screens/contacts.dart';
+// import 'package:myapp/screens/datetime.dart';
 import 'package:myapp/screens/signup_screen.dart';
 
 void main() {
@@ -16,7 +19,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
      
-      home:   Contact(),
+      home:   SignUpScreen(),
     );
   }
 }

@@ -33,9 +33,14 @@ class Sharedpref {
     print("Set phone: $phone");
   }
 
-  setAge(String age) async {
+  setDob(String dob) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("age", age);
+    prefs.setString("dob", dob);
+    print("Set dob: $dob");
+  }
+  setAge(int age) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt("age", age);
     print("Set age: $age");
   }
 
@@ -50,6 +55,10 @@ class Sharedpref {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(key);
   }
+  Future<int?> getAge(String key) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(key);
+  }
 
   printdata() async {
     String? username = await getDetail("name");
@@ -57,13 +66,15 @@ class Sharedpref {
     String? password = await getDetail("password");
     String? address = await getDetail("address");
     String? phone = await getDetail("phone");
-    String? age = await getDetail("age");
+    String? dob = await getDetail("dob");
+    int? age = await getAge('age');
     String? image = await getDetail("image");
     print("username: $username");
     print("email: $email");
     print("password: $password");
     print("address: $address");
     print("phone: $phone");
+    print("dob: $dob");
     print("age: $age");
     print("image: $image");
   }
@@ -74,7 +85,8 @@ Future<void> saveUserProfile({
   required String password,
   required String address,
   required String phone,
-  required String age,
+  required String dob,
+  // required int age,
   String? profilePicPath,
 }) async {
   await Sharedpref().setUserName(username);
@@ -82,7 +94,8 @@ Future<void> saveUserProfile({
   await Sharedpref().setPassword(password);
   await Sharedpref().setAddress(address);
   await Sharedpref().setPhone(phone);
-  await Sharedpref().setAge(age);
+  await Sharedpref().setDob(dob);
+  // await Sharedpref().setAge(age);
   if (profilePicPath!= null) {
     await Sharedpref().setProfile(profilePicPath);
   } else {

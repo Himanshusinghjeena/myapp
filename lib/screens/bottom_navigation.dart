@@ -38,17 +38,19 @@ class _BottomNavigationState extends State<BottomNavigation> {
         
       
        bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.green,
         items: [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-        BottomNavigationBarItem(icon: Icon(Icons.star_border), label: 'Favourites'),
+        BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'Home'),
+        BottomNavigationBarItem(icon: Icon(Icons.star_border_outlined), label: 'Favourites'),
         BottomNavigationBarItem(icon: Icon(Icons.watch_later_outlined), label: 'Recent'),
-        BottomNavigationBarItem(icon: Icon(Icons.perm_contact_cal_sharp), label: 'Contacts'),
+        BottomNavigationBarItem(icon: Icon(Icons.person_2_outlined), label: 'Contacts'),
       ],
       currentIndex: selectedIndex,
       onTap: onTap,
       selectedItemColor: Colors.cyan,
       unselectedItemColor: Colors.grey,
+      backgroundColor: Colors.black,
+      type: BottomNavigationBarType.fixed,
+
       ),
         );
   

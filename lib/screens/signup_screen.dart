@@ -1,8 +1,9 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_unnecessary_containers, sized_box_for_whitespace, prefer_final_fields, non_constant_identifier_names, avoid_print, unnecessary_null_comparison, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_unnecessary_containers, sized_box_for_whitespace, prefer_final_fields, non_constant_identifier_names, avoid_print, unnecessary_null_comparison, use_build_context_synchronously, unnecessary_string_interpolations, await_only_futures
 
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'dart:io';
 
 import 'package:myapp/screens/login_screen.dart';
@@ -26,12 +27,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   TextEditingController addressController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
-  TextEditingController ageController = TextEditingController();
 
-  XFile? profilepic ;
+  XFile? profilepic;
   ImagePicker picker = ImagePicker();
   final signupkey = GlobalKey<FormState>();
   bool agree = false;
+  DateTime? selectedDate;
+  String? date;
+  int? age;
 
   getImage() async {
     XFile? Photo = await picker.pickImage(source: ImageSource.gallery);
@@ -83,19 +86,63 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   child: SingleChildScrollView(
                     child: Column(children: [
                       Center(
-                        child: Container(
-                          width: 100,
-                          height: 100,
-                          decoration: BoxDecoration(
-                            color: Colors.grey,
-                            borderRadius: BorderRadius.circular(100),
+                        child: GestureDetector(
+                          onTap: () {
+                            showModalBottomSheet(
+                              context: context,
+                              builder: (context) {
+                                return Container(
+                                  height: 120,
+                                  color: Color.fromARGB(255, 82, 255, 223),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Column(
+                                        children: [
+                                          IconButton(
+                                              onPressed: clickImage,
+                                              icon: Icon(
+                                                  size: 50,
+                                                  Icons.camera_alt_outlined)),
+                                          Text(
+                                            "Camera",
+                                            style: TextStyle(fontSize: 20),
+                                          )
+                                        ],
+                                      ),
+                                      Column(
+                                        children: [
+                                          IconButton(
+                                              onPressed: getImage,
+                                              icon: Icon(
+                                                  size: 50,
+                                                  Icons
+                                                      .photo_size_select_actual_outlined)),
+                                          Text(
+                                            "Gallery",
+                                            style: TextStyle(fontSize: 20),
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          child: CircleAvatar(
+                            radius: 50,
+                            backgroundColor: Colors.amber[100],
+                            child: profilepic == null
+                                ? Icon(Icons.add_photo_alternate_outlined,
+                                    size: 40)
+                                : CircleAvatar(
+                                    radius: 50,
+                                    backgroundImage:
+                                        FileImage(File(profilepic!.path)),
+                                  ),
                           ),
-                          child: profilepic == null
-                              ? Icon(Icons.camera)
-                              : CircleAvatar(
-                                  backgroundImage:
-                                      FileImage(File(profilepic!.path)),
-                                ),
                         ),
                       ),
                       const SizedBox(height: 15),
@@ -201,66 +248,60 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   hintStyle: TextStyle(color: Colors.black26),
                                   border: OutlineInputBorder(
                                       borderSide:
-                                          BorderSide(color: Colors.black26),
+                                          BorderSide(color: Colors.black12),
                                       borderRadius: BorderRadius.circular(10))),
                             ),
                             const SizedBox(height: 10),
-                            TextFormField(
-                              controller: ageController,
-                              keyboardType: TextInputType.number,
-                              decoration: InputDecoration(
-                                  labelText: 'Age',
-                                  hintText: "Enter Your Age",
-                                  hintStyle: TextStyle(color: Colors.black26),
-                                  border: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.black26),
-                                      borderRadius: BorderRadius.circular(10))),
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Please Enter Age';
-                                } else {
-                                  try {
-                                    final age = int.parse(value);
-                                    if (age < 18) {
-                                      return 'You must be Greater than 18+';
-                                    }
-                                  } catch (e) {
-                                    return 'Please enter a valid number';
-                                  }
-                                }
-                                return null; // Return null if the value is valid
-                              },
-                            ),
-                            const SizedBox(height: 10),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                GestureDetector(
-                                  onTap: getImage,
-                                  child: Container(
-                                      padding: EdgeInsets.all(2),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        border: Border.all(
-                                            color: Colors.black12, width: 3),
-                                      ),
-                                      child: Text("Add Profile pic")),
-                                ),
-                                SizedBox(width: 10),
-                                GestureDetector(
-                                  onTap: clickImage,
-                                  child: Container(
-                                      padding: EdgeInsets.all(2),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        border: Border.all(
-                                            color: Colors.black12, width: 3),
-                                      ),
-                                      child: Text("Click Profile pic")),
-                                ),
-                              ],
-                            ),
+                            Container(
+                                height: 50,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color:Colors.black54),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
+                                    // color: Colors.white
+                                    ),
+                                child: Row(children: [
+                                  IconButton(
+                                      onPressed: () async {
+                                        DateTime? pickedDate =
+                                            await showDatePicker(
+                                          context: context,
+                                          initialDate: DateTime.now(),
+                                          firstDate: DateTime(1945),
+                                          lastDate: DateTime(2100),
+                                          helpText: "Select DOB"
+                                        );
+                                        if (pickedDate != null) {
+                                          setState(() {
+                                            selectedDate = pickedDate;
+                                          });
+                                        }
+                                      },
+                                      icon: Icon(
+                                          size: 25,
+                                          Icons.calendar_month_outlined,
+                                          color: Colors.black87)),
+                                  SizedBox(width: 10),
+                                  selectedDate != null
+                                      ? Text(
+                                          "${dateFormat()}",
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 16),
+                                        )
+                                      : Text("Enter DOB ",
+                                          style: TextStyle(color: Colors.black)),
+                                          SizedBox(width:20),
+                                          selectedDate != null ?
+                                          Text(
+                                            "${calcAge(selectedDate!)}",style: TextStyle(color: Colors.black)
+                                          )
+                                          :
+                                          Text("Age",style:TextStyle(color: Colors.black))
+                                ])),
+
+                          
                             Row(
                               children: [
                                 Checkbox(
@@ -289,15 +330,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 child: ElevatedButton(
                                     onPressed: () async {
                                       if (signupkey.currentState!.validate() &&
-                                          agree) {
+                                          agree && selectedDate!= null ) {
                                         await Sharedpref().saveUserProfile(
                                             username: usernameController.text,
                                             email: emailController.text,
                                             password: passwordController.text,
                                             address: addressController.text,
                                             phone: phoneController.text,
-                                            age: ageController.text,
-                                            profilePicPath: profilepic?.path ?? "no-image");
+                                            dob: date!,
+                                            profilePicPath:
+                                                profilepic?.path ?? "no-image");
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
@@ -305,7 +347,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                     LogInScreen()));
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
-                                          SnackBar(duration: Duration(seconds: 1),
+                                          SnackBar(
+                                            duration: Duration(seconds: 1),
                                             content:
                                                 Text('Sign up Successfully'),
                                           ),
@@ -315,7 +358,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                           agree == false) {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
-                                          SnackBar(duration: Duration(seconds: 1),
+                                          SnackBar(
+                                            duration: Duration(seconds: 1),
                                             content: Text(
                                                 'Please Agree the Policy & Services'),
                                           ),
@@ -324,9 +368,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                           .validate()) {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
-                                          SnackBar(duration: Duration(seconds: 1),
+                                          SnackBar(
+                                            duration: Duration(seconds: 1),
                                             content: Text(
                                                 'Please Fill Correct Details'),
+                                          ),
+                                        );
+                                      
+                                      } else if (signupkey.currentState!.validate() &&
+                                          agree && selectedDate== null ) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            duration: Duration(seconds: 1),
+                                            content: Text(
+                                                'Please Select you Date Of Birth'),
                                           ),
                                         );
                                       }
@@ -407,4 +463,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ])
         ]));
   }
+
+  String dateFormat() {
+     date = DateFormat('MM/dd/yyyy').format(selectedDate!);
+    Sharedpref().setDob(date!);
+    return date!;
+  }
+}
+
+int calcAge( DateTime selectedDate) 
+{
+  DateTime now = DateTime.now();
+  DateTime dob =  selectedDate;
+  int age = now.year - dob.year;
+   Sharedpref().setAge(age);
+  return age;
 }
