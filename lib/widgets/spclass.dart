@@ -146,7 +146,7 @@ class SharedPref {
 
     if (jsonString == null) {
       return [];
-    }
+    } 
 
     List<dynamic> jsonList = json.decode(jsonString);
     List<User> users = jsonList.map((json) => User.fromJson(json)).toList();
