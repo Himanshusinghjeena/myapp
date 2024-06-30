@@ -58,8 +58,9 @@ class _HomeScreenState extends State<HomeScreen> {
         SizedBox(
           height: 140,
           child: AppBar(
-            leading: const Icon(
-              Icons.arrow_back_ios_new_rounded,
+            leading:  IconButton(
+              icon: Icon(Icons.arrow_back_ios_new_rounded),
+              onPressed: () => Navigator.pop(context),
               color: Colors.white,
             ),
             title: const Text(
