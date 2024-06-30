@@ -292,7 +292,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         )
                                       : Text("Enter DOB ",
                                           style: TextStyle(color: Colors.black)),
-                                          SizedBox(width:20),
+                                          SizedBox(width:140),
                                           selectedDate != null ?
                                           Text(
                                             "${calcAge(selectedDate!)}",style: TextStyle(color: Colors.black)
