@@ -17,7 +17,8 @@ class _HomeScreenState extends State<HomeScreen> {
   String? phone;
   int? age;
   String? image;
-  List<bool> _isExpanded = [false]; // Add this
+  List<bool> _isExpanded = [false]; 
+  
 
   @override
   void initState() {
