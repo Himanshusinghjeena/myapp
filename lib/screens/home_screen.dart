@@ -57,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
       width: MediaQuery.of(context).size.width,
       child: Stack(children: [
         SizedBox(
-          height: 140,
+          height: 160,
           child: AppBar(
             leading:  IconButton(
               icon: Icon(Icons.arrow_back_ios_new_rounded),
@@ -90,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
           left: 50,
           right: 50,
           child: Container(
-            height: MediaQuery.of(context).size.height * 0.20,
+            height: MediaQuery.of(context).size.height * 0.25,
             decoration: const BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(10)),
               color: Colors.white,

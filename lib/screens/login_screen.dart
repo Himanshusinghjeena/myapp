@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_null_comparison, must_be_immutable, non_constant_identifier_names, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_null_comparison, must_be_immutable, non_constant_identifier_names, use_build_context_synchronously, prefer_final_fields, unused_field
 
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
@@ -11,8 +11,6 @@ import 'package:myapp/screens/signup_screen.dart';
 import 'package:myapp/screens/sharedpref.dart';
 
 class LogInScreen extends StatefulWidget {
-
-
   @override
   State<LogInScreen> createState() => _LogInScreenState();
 }
@@ -27,6 +25,7 @@ class _LogInScreenState extends State<LogInScreen> {
 
   final formKey = GlobalKey<FormState>();
   bool rememberPassword = false;
+  bool _obscureText = true;
 
   Future<bool?> login(String email, String password) async {
     final storedEmail = await Sharedpref().getDetail('email');
@@ -35,16 +34,16 @@ class _LogInScreenState extends State<LogInScreen> {
       return false;
     } else if (storedEmail == email && storedPassword == password) {
       return true;
+    } else {
+      return false;
     }
-    else {
-    return false; 
-  }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           iconTheme: const IconThemeData(color: Colors.white),
           backgroundColor: Colors.transparent,
           elevation: 0,
@@ -95,6 +94,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                     return null;
                                   },
                                   decoration: InputDecoration(
+                                    prefixIcon: Icon(Icons.email_outlined),
                                     labelText: 'Email',
                                     hintText: "Enter Email",
                                     hintStyle: TextStyle(color: Colors.black26),
@@ -112,7 +112,7 @@ class _LogInScreenState extends State<LogInScreen> {
                               SizedBox(height: 20),
                               TextFormField(
                                   controller: passwordController,
-                                  obscureText: true,
+                                  obscureText: _obscureText,
                                   obscuringCharacter: "*",
                                   validator: (value) {
                                     if (value!.isEmpty || value == null) {
@@ -124,6 +124,14 @@ class _LogInScreenState extends State<LogInScreen> {
                                     return null;
                                   },
                                   decoration: InputDecoration(
+                                    prefixIcon: Icon(Icons.key),
+                                    suffixIcon: IconButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            _obscureText = !_obscureText;
+                                          });
+                                        },
+                                        icon: _obscureText?Icon(Icons.visibility_off):Icon(Icons.visibility)),
                                     labelText: 'Password',
                                     hintText: "Enter Password",
                                     hintStyle: TextStyle(color: Colors.black26),
@@ -203,24 +211,29 @@ class _LogInScreenState extends State<LogInScreen> {
                                             );
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(
-                                              const SnackBar(duration: Duration(seconds: 1),
+                                              const SnackBar(
+                                                  duration:
+                                                      Duration(seconds: 1),
                                                   content: Text(
                                                       'Log in SuccessFull')),
                                             );
                                           } else if (isLogIn == false) {
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(
-                                              const SnackBar(duration: Duration(seconds: 1),
+                                              const SnackBar(
+                                                  duration:
+                                                      Duration(seconds: 1),
                                                   content:
                                                       Text('Login Failed')),
                                             );
-                                          } 
+                                          }
                                         } else if (emailController
                                                 .text.isEmpty ||
                                             passwordController.text.isEmpty) {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(
-                                            const SnackBar(duration: Duration(seconds: 1),
+                                            const SnackBar(
+                                                duration: Duration(seconds: 1),
                                                 content: Text(
                                                     'Invalid Email & Invalid Password')),
                                           );

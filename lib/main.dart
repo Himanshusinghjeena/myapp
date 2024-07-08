@@ -1,12 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:myapp/screens/api.dart';
+import 'package:myapp/screens/bottom_navigation.dart';
+import 'package:myapp/screens/home_screen.dart';
+import 'package:myapp/screens/login_screen.dart';
 import 'package:myapp/screens/signup_screen.dart';
+import 'package:myapp/screens/welcome_screen.dart';
 
-
-// import 'package:myapp/widgets/expansionwidget.dart';
-// import 'package:myapp/widgets/spclass.dart';
-// import 'package:myapp/widgets/userdata.dart';
 
 void main() {
   runApp( MyApp());
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
      
-      home:   SignUpScreen(),
+      home:   BottomNavigation(),
     );
   }
 }
